@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Código KUBO · Checklist del evento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#120d3d;--card:#1b1464;--card2:#2a1f7e;--txt:#fbf6fb;--mut:#c9b8e6;--line:#3d3294;--p1:#d4145a;--p2:#9e005d;--p3:#1b1464;--p4:#93278f;--tint:#ff8fbd}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:radial-gradient(1000px 600px at 0% -10%,rgba(212,20,90,.38) 0%,transparent 60%),radial-gradient(900px 600px at 100% 0,rgba(147,39,143,.45) 0%,transparent 60%),var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:20px 14px 90px}
+h1{font-family:Poppins,sans-serif;font-weight:800;font-size:26px;margin:6px 0 4px;line-height:1.15}
+.logo{display:flex;gap:8px;margin:4px 0 12px}.logo span{width:46px;height:46px;border-radius:12px;border:3px solid var(--c);display:grid;place-items:center;font:800 24px Poppins,sans-serif;color:var(--c);background:#fff;transform:rotate(var(--r));box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.sub{color:var(--mut);font-size:14px;margin:0 0 16px}
+.total{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:14px}
+.total .row{display:flex;justify-content:space-between;align-items:baseline;font-family:Poppins;font-weight:600}
+.bar{height:10px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p1),var(--p4));border-radius:99px;transition:width .3s}
+.quick{background:linear-gradient(135deg,var(--p2),var(--p4));border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:14px 16px;margin-bottom:14px}
+.quick h2{font:700 15px Poppins,sans-serif;margin:0 0 10px}
+.quick .f{display:flex;flex-direction:column;gap:8px}
+.quick select,.quick input{width:100%;background:rgba(27,20,100,.7);border:1px solid rgba(255,255,255,.25);color:var(--txt);border-radius:12px;padding:12px;font-size:15px;font-family:Inter}
+.quick button{background:#fff;color:var(--p2);border:0;border-radius:12px;padding:13px;font:700 15px Poppins,sans-serif;cursor:pointer}
+.banner{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:14px;line-height:1.5}.banner input{width:100%;margin:8px 0;background:rgba(27,20,100,.7);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:10px;padding:10px;font-size:13px}.banner button{background:#fff;color:#9e005d;border:0;border-radius:10px;padding:10px 14px;font:700 14px Poppins,sans-serif;cursor:pointer;margin-top:8px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;position:sticky;top:0;z-index:5;background:linear-gradient(var(--bg) 70%,transparent);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--txt);padding:9px 14px;border-radius:99px;font:600 13px Poppins,sans-serif;cursor:pointer;white-space:nowrap}
+.tab.on{background:var(--p1);color:#fff;border-color:var(--p1)}
+.tab small{opacity:.75;margin-left:5px;font-weight:500}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:6px 0 10px;margin-bottom:14px;overflow:hidden}
+.sec h2{font:700 16px Poppins,sans-serif;margin:0;padding:14px 16px 8px}
+.sec h3{font:600 12px Poppins,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--tint);margin:12px 16px 2px}
+.empty{color:var(--mut);font-size:14px;padding:6px 16px 10px}
+.item{display:flex;gap:12px;align-items:flex-start;padding:10px 16px;cursor:pointer}
+.item:active{background:var(--card2)}
+.item input{appearance:none;-webkit-appearance:none;flex:0 0 24px;width:24px;height:24px;border:2px solid #8e7fd6;border-radius:8px;margin:1px 0 0;display:grid;place-content:center;cursor:pointer;background:transparent}
+.item input:checked{background:var(--p1);border-color:var(--p1)}
+.item input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item span{font-size:15px;line-height:1.35;flex:1}
+.item input:checked+span{color:var(--mut);text-decoration:line-through}
+.item .x{color:var(--mut);background:none;border:0;font-size:20px;padding:0 4px;cursor:pointer}
+.item .x{font-size:16px}.item.editing{cursor:default;gap:8px;align-items:center}.item.editing .ed{flex:1;min-width:0;background:rgba(27,20,100,.7);border:1px solid var(--tint);color:var(--txt);border-radius:10px;padding:10px;font-size:15px;font-family:Inter}.item.editing button{border:0;border-radius:10px;padding:9px 12px;font:700 14px Poppins,sans-serif;cursor:pointer}.item.editing .ok{background:var(--p1);color:#fff}.item.editing .no{background:rgba(255,255,255,.15);color:#fff}
+.foot{display:flex;gap:10px;justify-content:center;margin-top:8px}
+.foot button{background:transparent;color:var(--mut);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font:500 13px Inter;cursor:pointer}
+.note{color:var(--mut);font-size:12px;text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><span style="--c:var(--p1);--r:-12deg">K</span><span style="--c:var(--p2);--r:0deg">U</span><span style="--c:#1b1464;--r:8deg">B</span><span style="--c:var(--p4);--r:0deg">O</span></div>
+  <h1>Código KUBO · Checklist</h1>
+  <p class="sub">After office en el bar · juegos de mesa (formato reducido) + juegos dinámicos de pie</p>
+  <div class="total"><div class="row"><span>Progreso total</span><span id="tp">0%</span></div><div class="bar"><i id="tb"></i></div></div>
+
+  <div class="banner" id="bn" style="display:none"></div>
+
+  <form class="quick" id="qf">
+    <h2>➕ Agregar un pendiente</h2>
+    <div class="f">
+      <input id="ni" placeholder="Escribí lo que se te ocurra…" autocomplete="off">
+      <select id="ns"></select>
+      <button>Agregar a la lista</button>
+    </div>
+  </form>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="view"></div>
+  <div class="foot"><button id="reset">Destildar todo</button><button id="restore">Restaurar originales</button></div>
+  <p class="note" id="st"></p>
+  <p class="note">Tocá ✎ para editar un ítem o × para sacarlo. Los cambios los ve todo el equipo (se actualiza cada pocos segundos).</p>
+</div>
+<script>
+const DATA=[
+{id:"gen",n:"General",e:"📋",groups:[
+ {t:"Definiciones clave",i:["Fecha, horario de inicio y horario de cierre del evento","Objetivo del evento (integración, networking, celebración)","Cantidad estimada de asistentes y lista de invitados","Presupuesto total y quién lo administra","Responsable general del evento y suplente","Referente de cada comité con su contacto","Grupo de coordinación (WhatsApp) con todos los referentes","Plan B ante imprevistos (lluvia, faltantes, asistencia baja o alta)"]},
+ {t:"Cronograma",i:["Cronograma minuto a minuto de la noche","Horario de montaje y prueba antes de abrir","Momento de bienvenida / palabras de apertura","Bloques de juegos y descansos definidos","Momento de premios y cierre","Horario de desarme y salida del equipo"]},
+ {t:"Día del evento",i:["Reunión corta del equipo antes de abrir puertas","Cada comité confirma que su zona está lista","Teléfonos de emergencia y contactos clave a mano","Botiquín de primeros auxilios en el bar","Identificar a un responsable que hable con el encargado del bar durante toda la noche"]},
+ {t:"Después del evento",i:["Revisar la cuenta final con el bar","Retirar todo el material propio (juegos, cartelería, decoración)","Agradecer a asistentes, al bar y a los voluntarios","Reunión de balance: qué salió bien y qué mejorar"]}]},
+
+{id:"log",n:"Logística",e:"🚚",groups:[
+ {t:"Acuerdo con el bar",i:["Confirmar fecha y horario con el encargado del bar","Confirmar por escrito qué sector del bar queda reservado para el evento","Definir si el sector es exclusivo o compartido con otros clientes","Capacidad máxima del sector (personas sentadas y de pie)","Acordar condiciones: consumo mínimo, seña, costo del sector o ninguno","Confirmar quién se encarga de comida, bebida y bandejeo (el bar)","Definir menú del evento: combos, promos, picadas, cartas o consumición libre","Definir sistema de pago: cada uno paga lo suyo, cuenta única, tickets o vales","Precio de bebidas y comidas informado a los invitados antes del evento","Opciones para vegetarianos, veganos y sin TACC consultadas con el bar","Cantidad de mozos asignados al sector y horarios de servicio","Horario de cocina: hasta qué hora sirven comida","Acordar si se puede mover mobiliario para armar las zonas de juego","Acordar horario de acceso para montaje (antes de abrir al público)","Acordar horario de cierre y desarme","Nombre y teléfono del encargado del bar el día del evento"]},
+ {t:"Distribución del espacio",i:["Pedir o hacer plano del bar con medidas del sector","Definir zona de juegos de mesa","Definir zona de juegos dinámicos de pie (espacio despejado)","Definir zona de recepción / acreditación","Definir circulación: ingreso, baños, barra, salida","Verificar que las mesas y sillas del bar alcanzan para la cantidad de jugadores","Pedir mesas altas o alargues de mesa si hacen falta","Ubicar un lugar seguro para guardar bolsos, juegos y materiales"]},
+ {t:"Asistentes",i:["Sistema de inscripción o confirmación de asistencia","Lista de ingreso en la puerta","Recordatorio a los confirmados 1–2 días antes","Cupo máximo y lista de espera si se llena","Plan para invitados que lleguen tarde o sin anotarse","Quién recibe en la puerta y cuántas personas","Definir si se permite acompañante (+1)"]},
+ {t:"Equipo y voluntarios",i:["Lista de voluntarios con roles asignados por horario","Remeras, credenciales o identificación para el equipo","Cómo se identifica el equipo organizador ante los invitados","Transporte de materiales al bar (quién, cómo, a qué hora)","Lugar donde se guarda el material propio durante el evento","Responsable de retirar el material al finalizar"]},
+ {t:"Seguridad y normativas",i:["Consultar al bar sobre habilitación, seguros y normas del lugar","Definir qué hacer con menores (si aplica) o restringir edad","Plan ante conflictos o personas que se pasen de copas","Salidas de emergencia identificadas","Acordar con el bar quién se encarga de la seguridad en la puerta"]}]},
+
+{id:"tec",n:"Técnica",e:"🔌",groups:[
+ {t:"Reconocimiento del lugar",i:["Visita técnica previa al bar","Ubicar tomas de corriente cercanas a cada zona","Consultar al bar si podemos usar sus parlantes o llevar los nuestros","Consultar si el bar tiene proyector, TV o pantallas disponibles","Consultar si hay Wi-Fi y pedir la clave","Medir nivel de ruido del bar en horario de evento","Confirmar con el bar si pueden bajar o cortar su música mientras hablamos"]},
+ {t:"Sonido",i:["Parlante propio con carga completa","Micrófono inalámbrico para anuncios y explicaciones","Cable de audio y adaptadores de respaldo","Playlist armada (volumen que permita conversar)","Música de fondo para juegos de mesa y música más movida para dinámicas","Quién maneja el sonido durante todo el evento"]},
+ {t:"Energía y equipos",i:["Alargues y zapatillas eléctricas","Cargadores y power banks para el equipo","Notebook con presentación / cronograma / puntajes","Proyector o pantalla para mostrar reglas, puntajes o temporizador","Temporizador visible para las dinámicas","Pilas de repuesto para micrófono y otros equipos"]},
+ {t:"Herramientas y respaldo",i:["Cinta adhesiva, cinta doble faz, precintos y tijeras","Prueba técnica completa antes de abrir","Plan B si se corta la luz o falla el sonido","Responsable técnico identificado durante todo el evento","Cámara o celular con espacio libre para registro"]}]},
+
+{id:"jue",n:"Juegos",e:"🎯",groups:[
+ {t:"Juegos de mesa (formato reducido)",i:["Elegir selección corta de juegos rápidos y fáciles de explicar","Elegir juegos que se puedan jugar con bebida en la mesa","Verificar que cada juego esté completo (piezas, cartas, dados)","Definir cuántas copias de cada juego y para cuántos jugadores","Definir cuántas mesas de juego se arman","Ficha resumida de reglas de cada juego (1 hoja)","Anfitriones que expliquen cada juego en 2 minutos","Sistema de rotación para que nadie se quede sin mesa","Proteger los juegos de derrames (fundas, bandejas, carteles)","Lugar donde se guardan los juegos no usados"]},
+ {t:"Juegos dinámicos de pie",i:["Definir 3–5 dinámicas que funcionen en el espacio del bar","Escribir reglas claras y duración estimada de cada una","Materiales de cada dinámica (tarjetas, pelotas, vendas, papel, lapiceras)","Que ninguna dinámica obligue a correr o mover mobiliario","Armar equipos con anticipación o mecánica de sorteo","Ensayo previo de las dinámicas con el equipo","Animador/a principal y árbitro de apoyo","Señalar el área de juego para que los mozos circulen sin molestar","Variante de cada dinámica por si hay más o menos gente"]},
+ {t:"Puntaje y premios",i:["Sistema de puntos simple y visible","Pizarra, planilla o pantalla para anotar resultados","Quién lleva la cuenta de puntos","Premios o reconocimientos (aunque sean simbólicos)","Momento y forma de entrega de premios","Desempate: qué se hace si hay empate"]},
+ {t:"Cronograma de juegos",i:["Juego rompehielos al comienzo","Alternar momentos activos con momentos de descanso","Pausas coordinadas con el servicio de comida y bebida del bar","Duración total de los juegos acorde al horario del bar","Cierre con una dinámica grupal","Plan B si un juego no funciona o se alarga"]}]},
+
+{id:"com",n:"Comunicación y redes",e:"📣",groups:[
+ {t:"Identidad y piezas gráficas",i:["Definir nombre, concepto y mensaje del evento","Definir paleta, tipografía y estilo visual","Logo o marca del evento","Invitación gráfica (formato feed 4:5 y formato stories)","Pieza con cronograma de la noche","Pieza con ubicación y cómo llegar al bar","Pieza con menú o promos del bar para el evento","Cartelería impresa para el evento (bienvenida, hashtag, zonas)"]},
+ {t:"Antes del evento",i:["Texto de convocatoria con fecha, hora, lugar y cómo confirmar","Calendario de publicaciones y cuenta regresiva","Coordinar con el bar para que también difunda el evento","Etiquetar al bar en las publicaciones","Mensaje de recordatorio para los confirmados","Hashtag oficial del evento","Armar grupo de difusión o lista de contactos","Responder consultas de los interesados (quién, dónde, cuándo)"]},
+ {t:"Durante el evento",i:["Responsable de fotos y videos","Stories en vivo con etiquetas y hashtag","Avisar a los asistentes que se toman fotos y videos","Cartel con el hashtag y el usuario a etiquetar","Registrar momentos clave: bienvenida, juegos, premios, brindis","Foto grupal al comienzo y al final"]},
+ {t:"Después del evento",i:["Publicar fotos y resumen dentro de las 24–48 hs","Mensaje de agradecimiento a asistentes y al bar","Encuesta corta de satisfacción","Guardar material para próximos eventos"]}]},
+
+{id:"amb",n:"Ambientación",e:"✨",groups:[
+ {t:"Permisos del bar",i:["Consultar al bar qué se puede colgar o pegar y qué no","Consultar si se puede mover o reordenar el mobiliario","Consultar si se puede cambiar o bajar la iluminación del sector","Consultar si se pueden usar globos, velas o elementos decorativos","Confirmar el horario para ambientar antes de abrir"]},
+ {t:"Concepto y decoración",i:["Definir temática y paleta de colores","Lista de elementos decorativos con presupuesto","Centros de mesa o individuales para las mesas de juego","Guirnaldas, luces cálidas o carteles que no dañen el lugar","Decoración inspirada en juegos (dados, cartas, fichas gigantes)","Cartelería de bienvenida","Carteles para identificar cada mesa / juego","Cartel con las reglas básicas de convivencia del evento"]},
+ {t:"Zonas y confort",i:["Zona de recepción con cartel y mesa de acreditación","Zona de mesa cómoda y bien iluminada","Zona de pie despejada para las dinámicas","Rincón de descanso o charla","Punto fotográfico (fondo, cartel o marco)","Revisar que la iluminación permita ver cartas y piezas"]},
+ {t:"Montaje y desarme",i:["Cronograma de montaje con horarios y responsables","Todo decorado al menos 1 hora antes de abrir","Kit de emergencia: cinta, tijeras, clips, pegamento","Lista de elementos que se llevan de vuelta","Plan de desarme y retiro de toda la decoración","Dejar el sector limpio y ordenado al terminar"]}]},
+
+{id:"otr",n:"Mis pendientes",e:"📝",groups:[]}
+];
+const API="https://jsonblob.com/api/jsonBlob/";
+let ROOM=(location.hash||"").replace(/[^A-Za-z0-9-]/g,"");
+let ST={items:{},tab:"gen"},EDIT=null,PENDING=false,LIVE=false,CONFIRM=null,DIRTY=false,TIMER=null,BUSY=false,ERR="";
+const LK=()=>"kubo-"+(ROOM||"local");
+try{const r=localStorage.getItem(LK());if(r)ST.items=JSON.parse(r)||{};const t=localStorage.getItem("kubo-tab");if(t)ST.tab=t}catch(e){}
+const cacheLocal=()=>{try{localStorage.setItem(LK(),JSON.stringify(ST.items))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const get=k=>ST.items[k]||{};
+const clean=o=>JSON.parse(JSON.stringify(o));
+function status(){const el=document.getElementById("st");if(!el)return;
+ el.textContent=!ROOM?"📴 Sin sala del equipo: tus cambios quedan solo en este celular":(LIVE?"🟢 Sincronizado con el equipo":(ERR?"🔴 Sin conexión, reintentando… ("+ERR+")":"⏳ Conectando con el equipo…"));
+ const bn=document.getElementById("bn");if(bn){
+  if(!ROOM){bn.style.display="block";bn.innerHTML='<b>Falta la sala del equipo.</b><br>Si sos quien organiza, tocá el botón una sola vez y compartí el link nuevo. Si te pasaron un link, usá ese link completo (termina con #algo).<br><button id="mk">Crear sala del equipo</button>'}
+  else{bn.style.display="block";bn.innerHTML='<b>Link para compartir con el equipo:</b><br><input id="lk" readonly value="'+esc(location.href)+'"><button id="cp">Copiar link</button>'}}}
+function touch(k,o){ST.items[k]=Object.assign(clean(o),{u:Date.now()});cacheLocal();DIRTY=true;schedule();render()}
+function put(k,patch){touch(k,Object.assign({},get(k),patch))}
+function drop(k){touch(k,{deleted:true})}
+function customs(c){return Object.keys(ST.items).filter(k=>k.startsWith("c-")&&get(k).committee===c.id&&!get(k).hidden&&!get(k).deleted).sort((a,b)=>(get(a).ts||0)-(get(b).ts||0))}
+function items(c){const out=[];c.groups.forEach((g,gi)=>g.i.forEach((t,i)=>{const k=c.id+"-"+gi+"-"+i;if(!get(k).hidden)out.push(k)}));return out.concat(customs(c))}
+function stats(c){const it=items(c);return{d:it.filter(k=>get(k).checked).length,n:it.length}}
+function row(k,def){
+ const tx=get(k).text!==undefined?get(k).text:def;
+ if(EDIT===k)return `<div class="item editing"><input class="ed" id="ed" value="${esc(tx)}" maxlength="200"><button type="button" class="ok" data-ok="1">✓</button><button type="button" class="no" data-no="1">✕</button></div>`;
+ return `<label class="item"><input type="checkbox" data-k="${k}" ${get(k).checked?"checked":""}><span>${esc(tx)}</span><button type="button" class="x" data-ed="${k}" aria-label="Editar">✎</button><button type="button" class="x" data-rm="${k}" aria-label="Quitar">×</button></label>`}
+function render(src){
+ if(src==="remote"&&EDIT!==null&&document.getElementById("ed")){PENDING=true;return}
+ let D=0,N=0;DATA.forEach(c=>{const s=stats(c);D+=s.d;N+=s.n});
+ const p=N?Math.round(D/N*100):0;
+ document.getElementById("tp").textContent=D+" / "+N+" · "+p+"%";
+ document.getElementById("tb").style.width=p+"%";
+ document.getElementById("tabs").innerHTML=DATA.map(c=>{const s=stats(c);return `<button class="tab ${c.id===ST.tab?"on":""}" data-t="${c.id}">${c.e} ${c.n}<small>${s.d}/${s.n}</small></button>`}).join("");
+ const sel=document.getElementById("ns");const cur=sel.value||ST.tab;
+ sel.innerHTML=DATA.map(c=>`<option value="${c.id}" ${c.id===cur?"selected":""}>${c.e} ${c.n}</option>`).join("");
+ const c=DATA.find(x=>x.id===ST.tab);
+ let h=`<div class="sec"><h2>${c.e} ${c.n}</h2>`;
+ c.groups.forEach((g,gi)=>{const rows=g.i.map((t,i)=>({k:c.id+"-"+gi+"-"+i,t})).filter(x=>!get(x.k).hidden);if(rows.length)h+=`<h3>${g.t}</h3>`+rows.map(x=>row(x.k,x.t)).join("")});
+ const cu=customs(c);
+ if(cu.length){h+=`<h3>${c.groups.length?"Agregados por el equipo":"Pendientes"}</h3>`+cu.map(k=>row(k,"")).join("")}
+ if(!c.groups.length&&!cu.length)h+=`<p class="empty">Acá van las cosas que agregues sin comité. Usá el formulario de arriba.</p>`;
+ h+=`</div>`;
+ document.getElementById("view").innerHTML=h;
+ document.getElementById("reset").textContent=CONFIRM==="reset"?"¿Seguro? Tocá de nuevo":"Destildar todo";
+ document.getElementById("restore").textContent=CONFIRM==="restore"?"¿Seguro? Tocá de nuevo":"Restaurar originales";
+ status();
+}
+function setTab(id){ST.tab=id;try{localStorage.setItem("kubo-tab",id)}catch(e){}}
+function saveEdit(){const el=document.getElementById("ed");const v=el?el.value.trim():"";const k=EDIT;EDIT=null;PENDING=false;if(v)put(k,{text:v});else render()}
+document.addEventListener("click",e=>{
+ if(e.target.id==="mk"){makeRoom();return}
+ if(e.target.id==="cp"){const i=document.getElementById("lk");i.select();try{navigator.clipboard.writeText(i.value)}catch(x){document.execCommand&&document.execCommand("copy")}e.target.textContent="¡Copiado!";setTimeout(()=>{e.target.textContent="Copiar link"},1500);return}
+ const t=e.target.closest(".tab");if(t){setTab(t.dataset.t);document.getElementById("ns").value=ST.tab;render();return}
+ const ed=e.target.closest("[data-ed]");if(ed){e.preventDefault();EDIT=ed.dataset.ed;render();const el=document.getElementById("ed");if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}return}
+ if(e.target.closest("[data-ok]")){e.preventDefault();saveEdit();return}
+ if(e.target.closest("[data-no]")){EDIT=null;PENDING=false;render();return}
+ const rm=e.target.closest("[data-rm]");if(rm){e.preventDefault();const k=rm.dataset.rm;if(k.startsWith("c-"))drop(k);else put(k,{hidden:true,checked:false});return}
+ if(e.target.id==="reset"){if(CONFIRM!=="reset"){CONFIRM="reset";render();setTimeout(()=>{if(CONFIRM==="reset"){CONFIRM=null;render()}},4000);return}
+  CONFIRM=null;Object.keys(ST.items).filter(k=>get(k).checked).forEach(k=>put(k,{checked:false}));render();return}
+ if(e.target.id==="restore"){if(CONFIRM!=="restore"){CONFIRM="restore";render();setTimeout(()=>{if(CONFIRM==="restore"){CONFIRM=null;render()}},4000);return}
+  CONFIRM=null;Object.keys(ST.items).filter(k=>!k.startsWith("c-")).forEach(k=>{const o=get(k);if(o.hidden||o.text!==undefined){const n=Object.assign({},o,{hidden:false});delete n.text;put(k,n)}});render()}
+});
+document.addEventListener("change",e=>{const k=e.target.dataset&&e.target.dataset.k;if(k)put(k,{checked:e.target.checked})});
+document.addEventListener("keydown",e=>{if(e.target.id==="ed"){if(e.key==="Enter"){e.preventDefault();saveEdit()}if(e.key==="Escape"){EDIT=null;PENDING=false;render()}}});
+document.getElementById("qf").addEventListener("submit",e=>{
+ e.preventDefault();const inp=document.getElementById("ni");const v=inp.value.trim();if(!v)return;
+ const id=document.getElementById("ns").value;const ts=Date.now();
+ const k="c-"+ts+"-"+Math.random().toString(36).slice(2,6);
+ inp.value="";setTab(id);put(k,{committee:id,text:v,custom:true,ts,checked:false});
+});
+/* ---- sincronización con el equipo ---- */
+async function makeRoom(){
+ try{
+  const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({items:ST.items})});
+  let loc=r.headers.get("Location")||r.headers.get("location")||"";
+  let id=loc.split("/").pop();
+  if(!id||!/^[A-Za-z0-9-]+$/.test(id)){throw new Error("sin id")}
+  ROOM=id;location.hash=id;cacheLocal();DIRTY=false;LIVE=true;status();startPolling();
+ }catch(e){const bn=document.getElementById("bn");if(bn)bn.insertAdjacentHTML("beforeend","<br><b>No se pudo crear la sala ("+esc(e.message||e)+"). Probá de nuevo en un rato.</b>")}
+}
+function merge(remote){let changed=false;
+ Object.keys(remote).forEach(k=>{const r=remote[k],l=ST.items[k];if(!l||(r.u||0)>(l.u||0)){ST.items[k]=r;changed=true}});
+ Object.keys(ST.items).forEach(k=>{const l=ST.items[k],r=remote[k];if(!r||(l.u||0)>(r.u||0))DIRTY=true});
+ return changed}
+async function sync(){
+ if(!ROOM||BUSY)return;BUSY=true;
+ try{
+  const g=await fetch(API+ROOM,{headers:{"Accept":"application/json"}});
+  if(!g.ok)throw new Error("HTTP "+g.status);
+  const doc=await g.json();const remote=(doc&&doc.items)||{};
+  const changed=merge(remote);
+  if(DIRTY){const p=await fetch(API+ROOM,{method:"PUT",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({items:ST.items})});
+   if(!p.ok)throw new Error("HTTP "+p.status);DIRTY=false}
+  LIVE=true;ERR="";cacheLocal();if(changed)render("remote");else status();
+ }catch(e){LIVE=false;ERR=String(e.message||e).slice(0,40);status()}
+ BUSY=false}
+function schedule(){if(!ROOM)return;clearTimeout(TIMER);TIMER=setTimeout(sync,700)}
+let POLL=null;function startPolling(){clearInterval(POLL);POLL=setInterval(()=>{if(!document.hidden&&EDIT===null)sync()},4000);sync()}
+window.addEventListener("hashchange",()=>location.reload());
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)sync()});
+render();if(ROOM)startPolling();
+</script>
+</body>
+</html>
