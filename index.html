@@ -69,7 +69,7 @@ h1{font-family:Poppins,sans-serif;font-weight:800;font-size:26px;margin:6px 0 4p
   <div id="view"></div>
   <div class="foot"><button id="reset">Destildar todo</button><button id="restore">Restaurar originales</button></div>
   <p class="note" id="st"></p>
-  <p class="note">Tocá ✎ para editar un ítem o × para sacarlo. Los cambios los ve todo el equipo (se actualiza cada pocos segundos).</p>
+  <p class="note">Tocá ✎ para editar un ítem o × para sacarlo. Los cambios los ve todo el equipo (se actualiza cada unos segundos).</p>
 </div>
 <script>
 const DATA=[
@@ -112,8 +112,8 @@ const DATA=[
 
 {id:"otr",n:"Mis pendientes",e:"📝",groups:[]}
 ];
-const API="https://jsonblob.com/api/jsonBlob/";
-let ROOM=(location.hash||"").replace(/[^A-Za-z0-9-]/g,"");
+const API="https://getpantry.cloud/apiv1/pantry/f358c2be-5fe9-4207-84d8-93394360a495/basket/checklist";
+let ROOM="main";
 let ST={items:{},tab:"gen"},EDIT=null,PENDING=false,LIVE=false,CONFIRM=null,DIRTY=false,TIMER=null,BUSY=false,ERR="";
 const LK=()=>"kubo-"+(ROOM||"local");
 try{const r=localStorage.getItem(LK());if(r)ST.items=JSON.parse(r)||{};const t=localStorage.getItem("kubo-tab");if(t)ST.tab=t}catch(e){}
@@ -122,10 +122,8 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const get=k=>ST.items[k]||{};
 const clean=o=>JSON.parse(JSON.stringify(o));
 function status(){const el=document.getElementById("st");if(!el)return;
- el.textContent=!ROOM?"📴 Sin sala del equipo: tus cambios quedan solo en este celular":(LIVE?"🟢 Sincronizado con el equipo":(ERR?"🔴 Sin conexión, reintentando… ("+ERR+")":"⏳ Conectando con el equipo…"));
- const bn=document.getElementById("bn");if(bn){
-  if(!ROOM){bn.style.display="block";bn.innerHTML='<b>Falta la sala del equipo.</b><br>Si sos quien organiza, tocá el botón una sola vez y compartí el link nuevo. Si te pasaron un link, usá ese link completo (termina con #algo).<br><button id="mk">Crear sala del equipo</button>'}
-  else{bn.style.display="block";bn.innerHTML='<b>Link para compartir con el equipo:</b><br><input id="lk" readonly value="'+esc(location.href)+'"><button id="cp">Copiar link</button>'}}}
+ el.textContent=LIVE?"🟢 Sincronizado con el equipo":(ERR?"🔴 Sin conexión, reintentando… ("+ERR+")":"⏳ Conectando con el equipo…");
+ const bn=document.getElementById("bn");if(bn){bn.style.display="block";bn.innerHTML='<b>Link para compartir con el equipo:</b><br><input id="lk" readonly value="'+esc(location.href.split("#")[0])+'"><button id="cp">Copiar link</button>'}}
 function touch(k,o){ST.items[k]=Object.assign(clean(o),{u:Date.now()});cacheLocal();DIRTY=true;schedule();render()}
 function put(k,patch){touch(k,Object.assign({},get(k),patch))}
 function drop(k){touch(k,{deleted:true})}
@@ -160,7 +158,6 @@ function render(src){
 function setTab(id){ST.tab=id;try{localStorage.setItem("kubo-tab",id)}catch(e){}}
 function saveEdit(){const el=document.getElementById("ed");const v=el?el.value.trim():"";const k=EDIT;EDIT=null;PENDING=false;if(v)put(k,{text:v});else render()}
 document.addEventListener("click",e=>{
- if(e.target.id==="mk"){makeRoom();return}
  if(e.target.id==="cp"){const i=document.getElementById("lk");i.select();try{navigator.clipboard.writeText(i.value)}catch(x){document.execCommand&&document.execCommand("copy")}e.target.textContent="¡Copiado!";setTimeout(()=>{e.target.textContent="Copiar link"},1500);return}
  const t=e.target.closest(".tab");if(t){setTab(t.dataset.t);document.getElementById("ns").value=ST.tab;render();return}
  const ed=e.target.closest("[data-ed]");if(ed){e.preventDefault();EDIT=ed.dataset.ed;render();const el=document.getElementById("ed");if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}return}
@@ -181,36 +178,27 @@ document.getElementById("qf").addEventListener("submit",e=>{
  inp.value="";setTab(id);put(k,{committee:id,text:v,custom:true,ts,checked:false});
 });
 /* ---- sincronización con el equipo ---- */
-async function makeRoom(){
- try{
-  const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({items:ST.items})});
-  let loc=r.headers.get("Location")||r.headers.get("location")||"";
-  let id=loc.split("/").pop();
-  if(!id||!/^[A-Za-z0-9-]+$/.test(id)){throw new Error("sin id")}
-  ROOM=id;location.hash=id;cacheLocal();DIRTY=false;LIVE=true;status();startPolling();
- }catch(e){const bn=document.getElementById("bn");if(bn)bn.insertAdjacentHTML("beforeend","<br><b>No se pudo crear la sala ("+esc(e.message||e)+"). Probá de nuevo en un rato.</b>")}
-}
 function merge(remote){let changed=false;
  Object.keys(remote).forEach(k=>{const r=remote[k],l=ST.items[k];if(!l||(r.u||0)>(l.u||0)){ST.items[k]=r;changed=true}});
  Object.keys(ST.items).forEach(k=>{const l=ST.items[k],r=remote[k];if(!r||(l.u||0)>(r.u||0))DIRTY=true});
  return changed}
 async function sync(){
- if(!ROOM||BUSY)return;BUSY=true;
+ if(BUSY)return;BUSY=true;
  try{
-  const g=await fetch(API+ROOM,{headers:{"Accept":"application/json"}});
-  if(!g.ok)throw new Error("HTTP "+g.status);
-  const doc=await g.json();const remote=(doc&&doc.items)||{};
+  const g=await fetch(API,{headers:{"Accept":"application/json"}});
+  let remote={};
+  if(g.ok){const doc=await g.json();remote=(doc&&doc.items)||{}}
+  else if(g.status!==400)throw new Error("HTTP "+g.status);
   const changed=merge(remote);
-  if(DIRTY){const p=await fetch(API+ROOM,{method:"PUT",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({items:ST.items})});
+  if(DIRTY||!g.ok){const p=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:ST.items})});
    if(!p.ok)throw new Error("HTTP "+p.status);DIRTY=false}
   LIVE=true;ERR="";cacheLocal();if(changed)render("remote");else status();
  }catch(e){LIVE=false;ERR=String(e.message||e).slice(0,40);status()}
  BUSY=false}
-function schedule(){if(!ROOM)return;clearTimeout(TIMER);TIMER=setTimeout(sync,700)}
-let POLL=null;function startPolling(){clearInterval(POLL);POLL=setInterval(()=>{if(!document.hidden&&EDIT===null)sync()},4000);sync()}
-window.addEventListener("hashchange",()=>location.reload());
+function schedule(){clearTimeout(TIMER);TIMER=setTimeout(sync,700)}
+let POLL=null;function startPolling(){clearInterval(POLL);POLL=setInterval(()=>{if(!document.hidden&&EDIT===null)sync()},8000);sync()}
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)sync()});
-render();if(ROOM)startPolling();
+render();startPolling();
 </script>
 </body>
 </html>
